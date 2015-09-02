@@ -41,21 +41,20 @@ class PaymentController extends Controller
 
         // Get a specific gateway
         $transaction = $payment->make($config);
-        // Change gateway exchange difference
-        $transaction->setExchangeDifference(1.111);
+        
+        // Change PayPal gateway exchange difference
+        if ($gateway == 'paypal') {
+            $transaction->setExchangeDifference(1.111);
+        }
 
         // Set PayU gateway inactive
         if ($gateway == 'payu') {
             $transaction->setStatus(0);
         }
 
-//        dd($transaction);
-
         if ($transaction->pay($request->except('_token'))) {
             // Send success email
             $transaction->sendVoucher();
-
-//            dd($transaction);
 
             return redirect()->back()->withAlerts(['success' => "Payment successful."]);
         };
@@ -64,6 +63,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * Validate request data.
+     *
      * @param Request $request
      */
     protected function validateData(Request $request)
@@ -79,6 +80,8 @@ class PaymentController extends Controller
     }
 
     /**
+     * Get gateway list and remove inactive.
+     *
      * @return mixed
      */
     protected function getGatewayList()
