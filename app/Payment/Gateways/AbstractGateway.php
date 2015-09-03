@@ -17,14 +17,14 @@ abstract class AbstractGateway
     /**
      * Configuration options.
      *
-     * @var string[]
+     * @var array
      */
     protected $config;
 
     /**
      * Gateway params to request.
      *
-     * @var float
+     * @var array
      */
     protected $params = [];
 
@@ -40,6 +40,7 @@ abstract class AbstractGateway
      * Check gateway status.
      *
      * @throws \Exception
+     * @return bool
      */
     protected function checkStatus()
     {
@@ -103,7 +104,7 @@ abstract class AbstractGateway
     /**
      * Get gateway params.
      *
-     * @return array|float
+     * @return array
      */
     protected function getParams()
     {
@@ -129,10 +130,17 @@ abstract class AbstractGateway
     /**
      * Send success payment mail.
      *
+     * @param $to
+     * @param $from
      * @return bool
      */
-    protected function sendSuccessMail()
+    protected function sendSuccessMail($to, $from)
     {
+        $userData = [
+            'to' => $to,
+            'from' => $from,
+        ];
+
         $data = [];
 
         $params = $this->getParams();
@@ -143,9 +151,10 @@ abstract class AbstractGateway
         $data['currency'] = $params['currency'];
         $data['date'] = Carbon::now()->format('Y-m-d H:i.s');
 
-//        Mail::send('emails.success', $data, function ($m) use ($data) {
-//            $m->to('brkblt@gmail.com', $data['name'])->subject('Payment Successful');
-//        });
+        Mail::send('emails.success', $data, function ($m) use ($userData) {
+            $m->from($userData['from'], 'Multi Gateway Payment');
+            $m->to($userData['to'])->subject('Payment Successful');
+        });
         return true;
     }
 }
