@@ -11,7 +11,7 @@ class Payment implements Factory
     /**
      * The current factory instances.
      *
-     * @var \Payment\Contracts\Factory[]
+     * @var \Payment\Contracts\Factory
      */
     protected $factories = [];
 
@@ -20,7 +20,7 @@ class Payment implements Factory
      *
      * @param array $config
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return Factory|Contracts\Gateway
      *
      */

@@ -41,7 +41,7 @@ class PaymentController extends Controller
 
         // Get a specific gateway
         $transaction = $payment->make($config);
-        
+
         // Change PayPal gateway exchange difference
         if ($gateway == 'paypal') {
             $transaction->setExchangeDifference(1.111);
@@ -54,7 +54,7 @@ class PaymentController extends Controller
 
         if ($transaction->pay($request->except('_token'))) {
             // Send success email
-            $transaction->sendVoucher();
+//            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
 
             return redirect()->back()->withAlerts(['success' => "Payment successful."]);
         };

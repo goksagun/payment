@@ -10,8 +10,6 @@ interface Factory
      *
      * @param array $config
      * @return \Payment\Contracts\Gateway
-     * @internal param \string[] $driver
-     *
      */
     public function make(array $config);
 }
