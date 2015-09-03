@@ -11,7 +11,16 @@
 |
 */
 
-Route::get('/', function () {
+/**
+ * Used for view payment form get request and form data post request.
+ */
+Route::get('/', 'PaymentController@getPayment');
+Route::post('/pay', 'PaymentController@postPayment');
+
+/**
+ * Used for only debug and testing.
+ */
+Route::get('/debug', function () {
     $config = config('payment.gateways');
 
     $paypal = new \Payment\Gateways\PayPal($config['paypal']);
@@ -29,7 +38,7 @@ Route::get('/', function () {
 
     var_dump($payu->pay($params));
 
-    var_dump($payu->sendVoucher());
+//    var_dump($payu->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com'));
 
     var_dump($paypal);
     var_dump($payu);
@@ -39,6 +48,3 @@ Route::get('/', function () {
     var_dump('payu: '.$payu->checkCurrency('TRY', 100));
     var_dump('paytrek: '.$paytrek->checkCurrency('TRY', 100));
 });
-
-Route::get('/pay', 'PaymentController@getPayment');
-Route::post('/pay', 'PaymentController@postPayment');
