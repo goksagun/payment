@@ -52,9 +52,11 @@ class PaymentController extends Controller
             $transaction->setStatus(0);
         }
 
-        if ($transaction->pay($request->except('_token'))) {
+        $params = $request->except('_token');
+
+        if ($transaction->pay($params)) {
             // Send success email
-//            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
+            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
 
             return redirect()->back()->withAlerts(['success' => "Payment successful."]);
         };
