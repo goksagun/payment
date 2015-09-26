@@ -17,7 +17,7 @@ class PaymentController extends Controller
      */
     public function getPayment()
     {
-        $gateways = $this->getGatewayList();
+        $gateways = $this->gatewayList();
 
         return view('pay', compact('gateways'));
     }
@@ -56,7 +56,7 @@ class PaymentController extends Controller
 
         if ($transaction->pay($params)) {
             // Send success email
-            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
+//            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
 
             return redirect()->back()->withAlerts(['success' => "Payment successful."]);
         };
@@ -86,7 +86,7 @@ class PaymentController extends Controller
      *
      * @return mixed
      */
-    protected function getGatewayList()
+    protected function gatewayList()
     {
         $gateways = config('payment.gateways');
 

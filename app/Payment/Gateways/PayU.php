@@ -46,18 +46,6 @@ class PayU extends AbstractGateway implements Gateway
     }
 
     /**
-     * Check currency and if exchange difference is different default calculate new value.
-     *
-     * @param $currency
-     * @param $value
-     * @return mixed
-     */
-    public function checkCurrency($currency, $value)
-    {
-        return $this->setValue($currency, $value);
-    }
-
-    /**
      * Make transaction.
      *
      * @param array $params
@@ -75,17 +63,5 @@ class PayU extends AbstractGateway implements Gateway
 
         // TODO Use PayU api to payment...
         return true;
-    }
-
-    /**
-     * Send success email.
-     *
-     * @param $to
-     * @param $from
-     * @return bool
-     */
-    public function sendVoucher($to, $from)
-    {
-        return $this->sendSuccessMail($to, $from);
     }
 }

@@ -15,6 +15,13 @@ use Mail;
 abstract class AbstractGateway
 {
     /**
+     * Gateway display name.
+     *
+     * @var string
+     */
+    protected $displayName;
+
+    /**
      * Configuration options.
      *
      * @var array
@@ -27,6 +34,20 @@ abstract class AbstractGateway
      * @var array
      */
     protected $params = [];
+
+    /**
+     * Gateway default currency.
+     *
+     * @var string
+     */
+    protected $defaultCurrency;
+
+    /**
+     * Gateway exchange differences.
+     *
+     * @var float
+     */
+    protected $exchangeDifference;
 
     /**
      * Inject the configuration for a Gateway.
@@ -42,10 +63,9 @@ abstract class AbstractGateway
      * @throws \Exception
      * @return bool
      */
-    protected function checkStatus()
+    public function checkStatus()
     {
         if (!$this->config['active']) {
-//            throw new \Exception("Selected gateway not active!");
             return false;
         }
         return true;
@@ -68,7 +88,7 @@ abstract class AbstractGateway
      */
     public function getDisplayName()
     {
-        return property_exists($this, 'displayName') ? $this->displayName : '';
+        return $this->displayName;
     }
 
     /**
@@ -76,9 +96,9 @@ abstract class AbstractGateway
      *
      * @return string
      */
-    protected function getDefaultCurrency()
+    public function getDefaultCurrency()
     {
-        return property_exists($this, 'defaultCurrency') ? $this->defaultCurrency : '';
+        return $this->defaultCurrency;
     }
 
     /**
@@ -88,7 +108,7 @@ abstract class AbstractGateway
      */
     public function setExchangeDifference($exchangeDifference)
     {
-        property_exists($this, 'exchangeDifference') ? $this->exchangeDifference = $exchangeDifference : '';
+        $this->exchangeDifference = $exchangeDifference;
     }
 
     /**
@@ -98,7 +118,7 @@ abstract class AbstractGateway
      */
     protected function setParams($params)
     {
-        property_exists($this, 'params') ? $this->params = $params : '';
+        $this->params = $params;
     }
 
     /**
@@ -108,7 +128,7 @@ abstract class AbstractGateway
      */
     protected function getParams()
     {
-        return property_exists($this, 'params') ? $this->params : [];
+        return $this->params;
     }
 
     /**
@@ -134,7 +154,7 @@ abstract class AbstractGateway
      * @param $from
      * @return bool
      */
-    protected function sendSuccessMail($to, $from)
+    public function sendVoucher($to, $from)
     {
         $userData = [
             'to' => $to,
@@ -156,5 +176,17 @@ abstract class AbstractGateway
             $m->to($userData['to'])->subject('Payment Successful');
         });
         return true;
+    }
+
+    /**
+     * Check currency and if exchange difference is different default calculate new value.
+     *
+     * @param $currency
+     * @param $value
+     * @return mixed
+     */
+    public function checkCurrency($currency, $value)
+    {
+        return $this->setValue($currency, $value);
     }
 }
