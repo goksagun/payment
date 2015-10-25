@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: burak
- * Date: 02.09.2015
- * Time: 12:53
- */
 
 namespace Payment\Gateways;
 
 use Carbon\Carbon;
-use Mail;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
 
 
 abstract class AbstractGateway
@@ -74,7 +69,7 @@ abstract class AbstractGateway
     /**
      * Set gateway status active or inactive.
      *
-     * @param int|boll $active
+     * @param int|bool $active
      */
     public function setStatus($active)
     {
@@ -169,9 +164,9 @@ abstract class AbstractGateway
         $data['name'] = $params['name'];
         $data['value'] = $params['value'];
         $data['currency'] = $params['currency'];
-        $data['date'] = Carbon::now()->format('Y-m-d H:i.s');
+        $data['date'] = Carbon::now()->format('Y-m-d H:i:s');
 
-        Mail::send('emails.success', $data, function ($m) use ($userData) {
+        Mail::send('emails.success', $data, function (Message $m) use ($userData) {
             $m->from($userData['from'], 'Multi Gateway Payment');
             $m->to($userData['to'])->subject('Payment Successful');
         });
