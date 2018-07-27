@@ -48,15 +48,15 @@ class PaymentController extends Controller
         }
 
         // Set PayU gateway inactive
-        if ($gateway == 'payu') {
-            $transaction->setStatus(0);
-        }
+        // if ($gateway == 'payu') {
+        //     $transaction->setStatus(0);
+        // }
 
         $params = $request->except('_token');
 
         if ($transaction->pay($params)) {
             // Send success email
-//            $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
+            // $transaction->sendVoucher('accounting@testtest.com', 'noreplay@testtest.com');
 
             return redirect()->back()->withAlerts(['success' => "Payment successful."]);
         };
